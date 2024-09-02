@@ -8,7 +8,6 @@ const createToken = (id) => {
     const token = jwt.sign({id}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
     })
-    console.log(token);
     return token;
 }
 
@@ -36,7 +35,7 @@ exports.signup = catchAsync(async (req, res)=>{
         name,
         email,
         password,    
-        confirmPassword
+        confirmPassword,
     });
     sendTokenWithData(newUser, 201,res);
 
@@ -49,12 +48,13 @@ exports.login = catchAsync(async (req, res, next)=>{
     }
     const user = await User.findOne({email}).select("+password");
 
-    let correctPassword = await user.checkPassword(password, user.password);
+    let correctPassword = await user.checkPassword(password);
     if(!user || !correctPassword){
         return next(new AppError("Invalid email or password", 401));
     }
 
     sendTokenWithData(user, 200, res);
+    req.body = user;
 
 })
 

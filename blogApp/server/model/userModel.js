@@ -55,8 +55,8 @@ userSchema.pre("save", async function(next){
     this.confirmPassword = undefined;
 })
 
-userSchema.methods.checkPassword = async function(givenPassword, hashedPassword){
-    return await bcrypt.compare(givenPassword, hashedPassword);
+userSchema.methods.checkPassword = async function(givenPassword){
+    return await bcrypt.compare(givenPassword, this.password);
 
 }
 
