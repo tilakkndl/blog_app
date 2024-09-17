@@ -46,6 +46,11 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "admin", "contributor"],
         default: "user"
     },
+    savePosts:{
+        type: [mongoose.Schema.ObjectId],
+        ref: "Post"
+    },
+    
     createdAt: {
         type: Date,
         default: Date.now,

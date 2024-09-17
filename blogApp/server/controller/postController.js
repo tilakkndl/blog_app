@@ -2,17 +2,20 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Post = require("../model/postModel");
 const ApiFeature = require("../utils/apiFeature");
+const User = require("../model/userModel")
 
  exports.createPost = catchAsync(async(req, res, next)=>{
-    const {title,content, category, keywords } = req.body;
-
-    console.log(req.body)
+    const {title,content, category, keywords, state } = req.body;
+    console.log(req.body);
     const newPost = await Post.create({
         title,
         content,
         category,
         keywords,
-        author: res.body._id
+        // state ? state : "draft",
+        state,
+        author: res.body._id,
+        image: req.body.image
         
     })
     res.status(201).json({
@@ -101,4 +104,34 @@ exports.deletePost = catchAsync(async(req, res, next)=>{
         }
     })
     
+})
+
+exports.savePost = catchAsync(async(req, res, next)=>{
+    const id = req.body.id;
+    const user = await User.findById(res.body._id);
+    if(!user){
+        return next(new AppError("User not found.Please log in first", 404));
+    }
+    const updatedUser  = await User.findByIdAndUpdate(res.body._id, {$push: {savePosts: id}}, {new: true, runValidators: true, useFindAndModify: false});
+
+    res.status(200).json({
+        success: true,
+        message: "Post saved successfully",
+        data: {
+            updatedUser
+        }
+    })
+})
+
+
+exports.getSavePost = catchAsync(async(req, res, next)=>{
+    const user = res.body._id;
+    const userSavePost = await User.findById(user).populate("savePosts");
+    res.status(200).json({
+        success: true,
+        message: "Get saved posts",
+        data: {
+            userSavePost: userSavePost.savePosts
+        }
+    })
 })

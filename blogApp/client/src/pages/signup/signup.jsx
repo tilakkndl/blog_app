@@ -1,28 +1,15 @@
-
 import React from 'react'
+import fetchData from "../../utils/fetchData";
 
-const Signup = () => {
+function Signup() {
+    console.log(import.meta.env.BASE_URL);
+    // const data = fetchData("");
+
   return (
-<>
-<div>
-    <h1>User Regitration</h1>
-  <form action='post'>
-<p>Name:</p>
-<input type="text" name="name" />
-<p>Email:</p>
-<input type="text" name="email" />
-<p>Password:</p>
-<input type="password" name='password' />
-<p>Confirm Password: </p>
-<input type="password" name='confirmPassword'/>
-
-<input type="submit" value="signup" />
-
-  </form>
-</div>
-
-</>
-)
+   <>
+   signup page
+   </>
+  )
 }
 
 export default Signup

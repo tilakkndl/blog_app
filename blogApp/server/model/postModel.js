@@ -27,6 +27,15 @@ const postSchema = new mongoose.Schema({
         type: [String],
         // required: true,
     },
+    image: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        default: "draft",
+        enums: ["draft", "published", "deleted"]
+    },
     createdAt: {
         type: Date,
         default: Date.now
